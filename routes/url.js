@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 
 const urlRouter = express.Router();
 const {
@@ -6,14 +6,15 @@ const {
   handleGetReq,
   handleAnalytics,
   handleDelete,
-} = require('../controllers/url');
+} = require("../controllers/url");
 
-urlRouter.post('/', handlePostReq);
+//Routes
+urlRouter.post("/", handlePostReq);
 
-urlRouter.get('/:id', handleGetReq);
+urlRouter.get("/:id", handleGetReq);
 
-urlRouter.get('/analytics/:id', handleAnalytics);
+urlRouter.get("/analytics/:id", handleAnalytics);
 
-urlRouter.delete('/:id', handleDelete);
+urlRouter.delete("/:id", handleDelete);
 
 module.exports = urlRouter;

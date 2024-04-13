@@ -1,10 +1,10 @@
-const { nanoid } = require('nanoid');
-const urlModel = require('../model/url');
+const { nanoid } = require("nanoid");
+const urlModel = require("../model/url");
 
 //Post Req
 const handlePostReq = async (req, res) => {
   const shortURL = nanoid(8);
-  if (!req.body.url) return res.status(400).json({ err: 'Url is Required!' });
+  if (!req.body.url) return res.status(400).json({ err: "Url is Required!" });
 
   await urlModel.create({
     shortId: shortURL,
@@ -12,13 +12,17 @@ const handlePostReq = async (req, res) => {
     visHistory: [],
   });
 
-  return res.status(201).json({ status: 'Success', id: shortURL });
+  //return res.status(201).json({ status: "Success", id: shortURL });
+
+  return res.render("../view/home.ejs", {
+    id: shortURL,
+  });
 };
 
 //Get Req
 const handleGetReq = async (req, res) => {
   const id = req.params.id;
-  if (!id) return res.status(400).json({ err: 'Id is Required!' });
+  if (!id) return res.status(400).json({ err: "Id is Required!" });
 
   const urlDoc = await urlModel.findOneAndUpdate(
     { shortId: id },
@@ -27,7 +31,7 @@ const handleGetReq = async (req, res) => {
   );
 
   if (!urlDoc) {
-    return res.status(404).json({ err: 'URL not found' });
+    return res.status(404).json({ err: "URL not found" });
   }
 
   // Redirect to the original URL
@@ -37,7 +41,7 @@ const handleGetReq = async (req, res) => {
 //Get Analytics
 const handleAnalytics = async (req, res) => {
   const id = req.params.id;
-  if (!id) return res.status(400).json({ err: 'Id is Required!' });
+  if (!id) return res.status(400).json({ err: "Id is Required!" });
 
   const info = await urlModel.findOne({ shortId: id });
 
@@ -47,19 +51,19 @@ const handleAnalytics = async (req, res) => {
 //Handle Delete
 const handleDelete = async (req, res) => {
   const id = req.params.id;
-  if (!id) return res.status(400).json({ err: 'Id is Required!' });
+  if (!id) return res.status(400).json({ err: "Id is Required!" });
 
   try {
     const deletedDoc = await urlModel.findOneAndDelete({ shortId: id });
 
     if (!deletedDoc) {
-      return res.status(404).json({ err: 'URL not found' });
+      return res.status(404).json({ err: "URL not found" });
     }
 
-    return res.status(200).json({ status: 'Success' });
+    return res.status(200).json({ status: "Success" });
   } catch (error) {
-    console.error('Error deleting URL:', error);
-    return res.status(500).json({ err: 'Internal Server Error' });
+    console.error("Error deleting URL:", error);
+    return res.status(500).json({ err: "Internal Server Error" });
   }
 };
 
